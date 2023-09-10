@@ -1,0 +1,125 @@
+# onlineeducationplatform
+
+#FACULTY LOGIN
+
+import mysql.connector
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="yourusername",
+  password="yourpassword",
+  database="yourdatabase"
+
+)
+
+mycursor = mydb.cursor()
+
+
+def faculty_login():
+    email = input("Enter your email: ")
+    password = input("Enter your password: ")
+
+    sql = "SELECT * FROM faculty WHERE email = %s AND password = %s"
+    val = (email, password)
+
+    mycursor.execute(sql, val)
+
+    result = mycursor.fetchone()
+
+    if result:
+        print("Login successful")
+    else:
+        print("Invalid email or password")
+
+faculty_login()
+
+
+#FACULTY HOME
+import mysql.connector
+
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="yourusername",
+  password="yourpassword",
+  database="yourdatabase"
+
+)
+
+mycursor = mydb.cursor()
+def view_classes():
+    sql = "SELECT * FROM classes"
+
+    mycursor.execute(sql)
+
+    result = mycursor.fetchall()
+
+    for x in result:
+        print(x)
+def view_classes_in_time_slot():
+    start_time = input("Enter start time: ")
+    end_time = input("Enter end time: ")
+
+    sql = "SELECT * FROM classes WHERE start_time >= %s AND end_time <= %s"
+    val = (start_time, end_time)
+
+    mycursor.execute(sql, val)
+
+    result = mycursor.fetchall()
+
+    for x in result:
+        print(x)
+def add_class():
+    class_name = input("Enter class name: ")
+    start_time = input("Enter start time: ")
+    end_time = input("Enter end time: ")
+    class_type = input("Enter class type: ")
+    class_duration = input("Enter class duration: ")
+    class_fee = input("Enter class fee: ")
+
+    sql = "INSERT INTO classes (class_name, start_time, end_time, class_type, class_duration, class_fee) VALUES (%s, %s, %s, %s, %s, %s)"
+    val = (class_name, start_time, end_time, class_type, class_duration, class_fee)
+
+    mycursor.execute(sql, val)
+
+    mydb.commit()
+
+    print("Class added successfully")
+def delete_class():
+    class_id = input("Enter class id: ")
+
+    sql = "DELETE FROM classes WHERE class_id = %s"
+    val = (class_id,)
+
+    mycursor.execute(sql, val)
+
+    mydb.commit()
+
+    print("Class deleted successfully")
+def update_class():
+    class_id = input("Enter class id: ")
+
+    sql = "SELECT * FROM classes WHERE class_id = %s"
+    val = (class_id,)
+
+    mycursor.execute(sql, val)
+
+    result = mycursor.fetchone()
+
+    if result:
+        class_name = input("Enter class name: ")
+        start_time = input("Enter start time: ")
+        end_time = input("Enter end time: ")
+        class_type = input("Enter class type: ")
+        class_duration = input("Enter class duration: ")
+        class_fee = input("Enter class fee: ")
+
+        sql = "UPDATE classes SET class_name = %s, start_time = %s, end_time = %s, class_type = %s, class_duration = %s, class_fee = %s WHERE class_id = %s"
+        val = (class_name, start_time, end_time, class_type, class_duration, class_fee, class_id)
+
+        mycursor.execute(sql, val)
+
+        mydb.commit()
+
+        print("Class updated successfully")
+    else:
+        print("Class not found")
